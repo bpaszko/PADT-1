@@ -1,6 +1,6 @@
-categorization/
-projections/
-models/
+/categorization/
+/projections/
+/models/
 
 
 *.pyc
