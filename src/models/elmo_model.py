@@ -1,6 +1,7 @@
 from .base_model import BaseModel
 from elmoformanylangs import Embedder
 import numpy as np
+import logging 
 
 
 class ElmoModel(BaseModel):

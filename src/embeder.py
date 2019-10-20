@@ -1,5 +1,4 @@
 from document import Document
-from models import *
 
 import os
 import re
@@ -17,16 +16,20 @@ class Embeder:
     def _load_data(self, corpus_dir):
         data = {}
         nlp = spacy.load('xx')
-        for doc_name in tqdm(os.listdir(corpus_dir)[:100], desc='Loading corpus...'):
-            doc_path = os.path.join(corpus_dir, doc_name)
-            doc = Document.from_file(doc_path, nlp)
-            data[doc_name] = doc
+        for root, _, files in os.walk(corpus_dir):
+            if not files:
+                continue
+
+            for doc_name in tqdm(files, desc=f'Loading corpus from {root}...'):
+                doc_path = os.path.join(root, doc_name)
+                doc = Document.from_file(doc_path, nlp)
+                data[doc_path] = doc
         return data
 
     def get_embeddings(self, context, neighborhood, model):
         assert context in ['one-mention', 'document', 'corpus']
         embeddings = defaultdict(list)
-        for _, doc in tqdm(self._data.items(), desc='Computing embeddings...'):
+        for _, doc in tqdm(self._data.items(), desc=f'Computing embeddings ({model.__class__.__name__}, {context}, {str(neighborhood)})...'):
             neighborhood_dict = doc.get_neighbors(neighborhood)  # return words in specified neighbourhood
             for (person, category), doc_neighbors in neighborhood_dict.items():
                 one_mention_embeds = np.vstack(model.process(doc_neighbors))
@@ -54,17 +57,3 @@ class Embeder:
         writer = SummaryWriter(log_dir=save_dir)
         writer.add_embedding(embeds, metadata=metadata)
         writer.close()
-
-
-if __name__ == '__main__':
-    corpus_dir = '../categorization/learningData/korpusONET'
-    model_dir = '../models/elmo_polish/'
-    save_dir = '../projections/elmo_test'
-
-    x = Embeder(corpus_dir)
-    model = ElmoModel(model_dir)
-    embeds = x.get_embeddings('corpus', 5, model)
-
-    print(len(embeds))
-    print(embeds[('Donald Tusk', 'politycy')].shape)
-    x.save_to_tensorboard(embeds, save_dir)
