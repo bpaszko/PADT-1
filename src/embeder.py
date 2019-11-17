@@ -1,4 +1,4 @@
-from document import Document
+from .document import Document
 
 import os
 import re
