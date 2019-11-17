@@ -1,8 +1,8 @@
 /categorization/
 /projections/
 /models/
+/notebooks/embe_scores.ipynb
 
-*.ipynb
 *.ipynb_checkpoints/
 *.pyc
 */__pychache__/
