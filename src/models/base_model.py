@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
 
+# Remember to import your model in __init__.py
+
+
 class BaseModel(ABC):
     @abstractmethod
     def process(self, words_list: 'typing.List[typing.List[str]]') -> 'typing.List[np.ndarray]':

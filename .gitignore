@@ -2,6 +2,7 @@
 /projections/
 /models/
 
-
+*ipynb
+*ipynb_checkpoints/
 *.pyc
 */__pychache__/
