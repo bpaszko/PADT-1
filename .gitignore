@@ -2,6 +2,7 @@
 /projections/
 /models/
 /notebooks/embe_scores.ipynb
+/data
 
 *.ipynb_checkpoints/
 *.pyc
